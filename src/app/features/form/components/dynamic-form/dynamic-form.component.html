@@ -1,0 +1,65 @@
+<form [formGroup]="form" class="p-4 border rounded bg-light">
+  @for (field of fields; track field.name) {
+  {{field.name }}
+  <div class="mb-3">
+    @if (field.type === 'checkbox') {
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" [id]="field.name" [formControlName]="field.name" />
+      <label class="form-check-label" [for]="field.name">
+        {{ field.label }}
+      </label>
+    </div>
+    }
+
+    @else if (field.type === 'select') {
+    <select class="form-select" [class.is-invalid]="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.invalid
+        " [id]="field.name" [formControlName]="field.name">
+      <option [value]="field.value">Select {{ field.name }}</option>
+      @for (option of field.options; track option) {
+      <option [value]="option.value">
+        {{ option.key }}
+      </option>
+      }
+    </select>
+    }
+    @else if (field.type === 'radio') {
+    <div>
+      @for (option of field.options; track option) {
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" [id]="field.name + '_' + option.value"
+          [formControlName]="field.name" [value]="option.value" />
+        <label class="form-check-label" [for]="field.name + '_' + option.value">
+          {{ option.key }}
+        </label>
+      </div>
+      }
+    </div>
+    }
+    @else {
+    <label class="form-label" [for]="field.name">
+      {{ field.label | titlecase }}
+    </label>
+    <input class="form-control" [class.is-invalid]="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.invalid
+        " [id]="field.name" [formControlName]="field.name" type="{{field.type }}" />
+    }
+
+
+
+    @if (
+    form.get(field.name)?.touched &&
+    form.get(field.name)?.hasError('required')
+    ) {
+    <div class="invalid-feedback">
+      This field is required
+    </div>
+    }
+
+  </div>
+
+  }
+
+</form>
