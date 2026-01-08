@@ -70,3 +70,39 @@ Bind it to the wrapper component:
 
 The wrapper listens for `submitted` and exposes reset/submit helpers for easy integration.
 
+---
+
+## Demo / Screenshot
+
+> **Note:** Consider deploying to Vercel, Netlify, or GitHub Pages and add a live demo link here!
+
+The form supports:
+- ✅ Text, email, password inputs
+- ✅ Select dropdowns
+- ✅ Radio buttons
+- ✅ Checkboxes
+- ✅ Required and email validators
+- ✅ Real-time validation feedback
+- ✅ Dynamic form rebuilding on config changes
+
+---
+
+## Project Structure
+
+```
+src/app/features/form/
+├── components/
+│   ├── dynamic-form/          # Core form component
+│   └── dynamic-form-wrapper/  # Wrapper with submit/reset
+├── models/
+│   └── input-config.ts        # Field configuration interface
+└── services/
+    └── form-config.service.ts # Signal-based config service
+```
+
+---
+
+## License
+
+MIT
+
