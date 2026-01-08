@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { DynamicFormWrapperComponent } from './dynamic-form-wrapper.component';
 import { FormGroup } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
+import { DynamicFormWrapperComponent } from './dynamic-form-wrapper.component';
 
 describe('DynamicFormWrapperComponent', () => {
   let component: DynamicFormWrapperComponent;
@@ -28,5 +29,14 @@ describe('DynamicFormWrapperComponent', () => {
     const spyOnReset = spyOn(FormGroup.prototype, 'reset');
     component.onReset(new FormGroup({}));
     expect(spyOnReset).toHaveBeenCalled();
+  });
+
+  it('should delegate submit to child component', () => {
+    const child = fixture.debugElement.query(By.directive(DynamicFormComponent)).componentInstance as DynamicFormComponent;
+    const submitSpy = spyOn(child, 'submit');
+
+    component.onSubmit();
+
+    expect(submitSpy).toHaveBeenCalled();
   });
 });

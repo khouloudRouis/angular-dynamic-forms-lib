@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { DynamicFormComponent } from './dynamic-form.comonent';
-import {FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
+import { DynamicFormComponent } from './dynamic-form.component';
 import { InputConfig } from '../../models/input-config';
 
 describe('DynamicFormComponent', () => {
@@ -19,14 +18,14 @@ describe('DynamicFormComponent', () => {
 
     component = fixture.componentInstance;
     component.fields = [
-      { name: 'email', validators: [Validators.required, Validators.email] } as InputConfig
+      { type: 'email', name: 'email', validators: [Validators.required, Validators.email] } as InputConfig
     ];
 
     fixture.detectChanges();
    
   });
 
-  it('should create and apply validators', () => {
+  it('should create controls and apply validators', () => {
     expect(component).toBeTruthy();
     expect(component.form).toBeDefined();
     expect(component.form.contains('email')).toBeTrue();
@@ -38,7 +37,26 @@ describe('DynamicFormComponent', () => {
     expect(emailCtrl.hasError('email')).toBeTrue();
   });
 
-   it('should reset', () => {
+  it('should emit on submit when valid', () => {
+    const emitSpy = spyOn(component.submitted, 'emit');
+    const emailCtrl = component.form.get('email')!;
+    emailCtrl.setValue('test@example.com');
+
+    component.submit();
+
+    expect(emitSpy).toHaveBeenCalledWith({
+      value: { email: 'test@example.com' },
+      valid: true
+    });
+  });
+
+  it('should not emit when invalid', () => {
+    const emitSpy = spyOn(component.submitted, 'emit');
+    component.submit();
+    expect(emitSpy).not.toHaveBeenCalled();
+  });
+
+  it('should reset via lifecycle', () => {
     const spyOnReset = spyOn(FormGroup.prototype, 'reset');
     component.ngOnDestroy();
     expect(spyOnReset).toHaveBeenCalled();

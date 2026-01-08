@@ -1,6 +1,6 @@
-<form [formGroup]="form" class="p-4 border rounded bg-light">
+<form [formGroup]="form" class="p-4 border rounded bg-light" (ngSubmit)="submit()" novalidate>
   @for (field of fields; track field.name) {
-  {{field.name }}
+
   <div class="mb-3">
     @if (field.type === 'checkbox') {
     <div class="form-check mb-3">
@@ -12,6 +12,9 @@
     }
 
     @else if (field.type === 'select') {
+    <label class="form-label" [for]="field.name">
+      {{ field.label | titlecase }}
+    </label>
     <select class="form-select" [class.is-invalid]="
           form.get(field.name)?.touched &&
           form.get(field.name)?.invalid
@@ -25,6 +28,7 @@
     </select>
     }
     @else if (field.type === 'radio') {
+
     <div>
       @for (option of field.options; track option) {
       <div class="form-check form-check-inline">
@@ -41,6 +45,7 @@
     <label class="form-label" [for]="field.name">
       {{ field.label | titlecase }}
     </label>
+
     <input class="form-control" [class.is-invalid]="
           form.get(field.name)?.touched &&
           form.get(field.name)?.invalid
